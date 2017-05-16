@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Biddr</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse bg-inverse">
+      <a class="navbar-brand" href="/auctions">Biddr</a>
+      <div class="log-in col-6">
+        <% if user_sign_in? %>
+          <%= link_to 'Create Auction', new_auction_path %> |
+          <%= link_to 'My Bids', user_bids_path(current_user.id) %> |
+          <%= link_to "Watched Auctions", user_watches_path(current_user.id) %>
+          <span class="nav-text">Welcome <%= current_user.full_name %></span>
+          <%= link_to "Sign Out", sessions_path, method: :delete %>
+        <% else %>
+          <span class="nav-text">You are not signed in</span>
+          <%= link_to 'Sign Up', new_user_path %>
+          <%= link_to 'Sign In', new_session_path %>
+        <% end %>
+      </div>
+    </nav>
+    <%= yield %>
+  </body>
+</html>

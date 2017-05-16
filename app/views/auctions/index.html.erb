@@ -1,0 +1,17 @@
+<div class="container">
+  <h1>Main Page</h1>
+
+  <% @auctions.each do |auction| %>
+    <% if auction.published? == true || auction.reserve_met? == true %>
+      <div>
+        <h3><%= link_to auction.title, auction_path(auction) %></h3>
+        <hr>
+      </div>
+    <% elsif auction.user_id == current_user.id %>
+      <div>
+        <h3><%= link_to auction.title, auction_path(auction) %></h3>
+        <hr>
+      </div>
+    <% end %>
+  <% end %>
+</div>

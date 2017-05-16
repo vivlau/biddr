@@ -1,0 +1,10 @@
+<div class="container">
+  <h1>Bids placed by <%= @user&.full_name %></h1>
+
+  <ul>
+  <% @auctions.each do |a| %>
+
+    <li><%= link_to a.auction.title, "/auctions/#{a.auction.id}" %></li>
+  <% end %>
+  </ul>
+</div>

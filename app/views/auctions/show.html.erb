@@ -1,0 +1,51 @@
+<div class="container">
+
+  <div class="row">
+    <div class="title-block col-xs-12 col-sm-6">
+      <h1><%= @auction.title %></h1>
+      <%= @auction.details %>
+    </div>
+    <div class="price-block col-xs-12 col-sm-6">
+      <p>Current Price $<%= @auction.current_bid %></p>
+      <% if @auction.current_bid <= @auction.reserve_price %>
+          <p>Reserve Price Not Met</p>
+      <% else %>
+          <p>Reserve Price Has Been Met</p>
+          <% @auction.meet_reserve == true %>
+      <% end %>
+
+      <% if @auction.may_publish? && current_user.id == @auction.user_id%>
+        <%= button_to 'Publish', auction_publishings_path(@auction), method: :post, :class=>"publish-button btn btn-primary" %>
+      <% end %>
+
+
+      <% if user_sign_in? && can?(:watch, @auction) %>
+        <% if @auction.watched_by?(current_user)  %>
+          <%= link_to fa_icon("eye-slash 2x"), auction_watch_path(@auction, @auction.watch_for(current_user)), method: :delete %>
+        <% else %>
+          <%= link_to fa_icon("eye 2x"), auction_watches_path(@auction), method: :post %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+
+    <div class="row col-xs-12">
+      <%= simple_form_for [@auction, @bid] do |f| %>
+      <%= f.input :bid_price %>
+      <%= f.button :submit %>
+      <% end %>
+    </div>
+
+  <div class="row col-xs-12">
+    <h2>Previous Bids</h2>
+    <% @auction.bids.order(created_at: :desc).each do |bid| %>
+      <div>
+        <p>$<%= bid.bid_price %> at <%= bid.created_at.strftime("%b %d %Y") %></p>
+        <strong>by <%= User.find(bid.user_id).first_name %> <%= User.find(bid.user_id).last_name %> </strong>
+        <hr>
+      </div>
+    <% end %>
+  </div>
+
+</div>
